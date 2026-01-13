@@ -34,7 +34,7 @@ def requests_newspage(driver: webdriver, news_organ: str, homepage_addr: str, pa
     links = [
         urljoin(url, a["href"])
         for a in contents
-    ][:2]
+    ][:1]
 
     results = tuple(fetch_link(link, news_organ) for link in links)
 
@@ -67,7 +67,7 @@ def fetch_html(url: str) -> str:
             "Mozilla/5.0"
         ]
 
-    result = requests.get(url, headers={"User-Agent": random.choice(headers)}, timeout=5)
+    result = requests.get(url, headers={"User-Agent": random.choice(headers)}, timeout=60)
     result.raise_for_status()
 
     return result.text

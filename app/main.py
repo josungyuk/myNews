@@ -1,7 +1,7 @@
 from typing import Union
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from app.modules.news.service import crawling_service as cs
+from app.modules.news.application.service import crawling_service as cs
 
 app = FastAPI()
 
@@ -13,9 +13,6 @@ def get_news():
     result = cs.get_news()
     title = result[0][0]["title"]
     content = result[0][0]["content"]
-
-    print(result[1][0]["title"])
-    print(result[1][0]["content"])
 
     # 결과 구조가 <tuple><tuple><dict>인데, 그 이유가 <언론사별><n번째 기사별><제목/내용> 이기 때문이다.
     # 그렇기에 이제 DB연결이 필요하다.
