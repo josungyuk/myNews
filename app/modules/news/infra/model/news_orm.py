@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from app.common.db.base import Base
 
-class NewsEntity(Base):
+class NewsORM(Base):
     __tablename__ = "news"
 
     id: Mapped[int] = mapped_column(
@@ -15,6 +15,11 @@ class NewsEntity(Base):
     hash_id: Mapped[str] = mapped_column(
         String(16),
         nullable=False,
+    )
+
+    url: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False
     )
 
     title: Mapped[str] = mapped_column(
