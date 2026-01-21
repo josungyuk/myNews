@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv
+load_dotenv()
 
 class Settings:
     DB_USER: str = os.getenv("DB_USER")
@@ -20,7 +20,7 @@ class Settings:
     
     def vaildate(self):
         missing = [
-            key for key, value in vars(self).item()
+            key for key, value in vars(self).items()
             if key.startswith("DB_") and value is None
         ]
 

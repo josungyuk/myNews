@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from app.common.config.settings import settings
 
 engine = create_engine(
@@ -7,8 +7,19 @@ engine = create_engine(
     pool_pre_ping = True
 )
 
-session_local = sessionmaker(
+SessionLocal = sessionmaker(
     bind = engine,
     autocommit = False,
     autoflush = False,
 )
+
+def get_session() -> Session:
+    db = SessionLocal()
+    try:
+        yield db
+        db.commit()
+    except:
+        db.rollback()
+        raise
+    finally:
+        db.close()
