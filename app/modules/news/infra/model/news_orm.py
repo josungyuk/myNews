@@ -12,11 +12,6 @@ class NewsORM(Base):
         primary_key=True,
     )
 
-    hash_id: Mapped[str] = mapped_column(
-        String(16),
-        nullable=False,
-    )
-
     url: Mapped[str] = mapped_column(
         String(255),
         nullable=False
@@ -32,7 +27,7 @@ class NewsORM(Base):
         nullable=False
     )
 
-    datetime: Mapped[datetime] = mapped_column(
+    created_at: Mapped[datetime] = mapped_column(
         DateTime,
         nullable=False
     )
