@@ -22,7 +22,7 @@ class Crawling(CrawlingPort):
             url = f"{news_addr}/{page_id}"
 
             html = get_page_driver(driver, url)
-            links = parse_link(html, content_tag, url)[:2]
+            links = parse_link(html, content_tag, url)[:10]
 
             for link in links:
                 article_html = get_page_driver(driver, link)
