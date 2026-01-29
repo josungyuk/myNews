@@ -1,4 +1,5 @@
 from selenium import webdriver
+from app.common.config.logging import logger
 
 from app.modules.news.infra.crawling.sources.parameter import parameters
 from app.modules.news.application.interface.crawling_port import CrawlingPort
@@ -23,6 +24,8 @@ class Crawling(CrawlingPort):
 
             html = get_page_driver(driver, url)
             links = parse_link(html, content_tag, url)[:10]
+
+            logger.info(links)
 
             for link in links:
                 article_html = get_page_driver(driver, link)

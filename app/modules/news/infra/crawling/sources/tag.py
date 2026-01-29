@@ -60,10 +60,10 @@ news_organ_type = {
 }
 
 news_organ_content_tag = {
-    NewsSource.YNA : ".list01 a[href ^= 'https://www.yna.co.kr/view/']",
+    NewsSource.YNA : ".list01 .item-box01 .img-con01 a[href ^= 'https://www.yna.co.kr/view/']",
     NewsSource.YTN : ".title a[href ^= 'https://www.ytn.co.kr/_ln/']",
     NewsSource.REUTERS : ".TitleLink a[href ^= '/worlds/']",
-    NewsSource.BBC : "a[href ^= '/news/articles/']"
+    NewsSource.BBC : "a[href ^= '/news/articles/'][data-testid=internal-link]:has(p)"
 }
 
 new_organ_extract_title_tag = {
