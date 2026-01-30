@@ -3,6 +3,7 @@ from datetime import datetime
 from urllib.parse import urljoin
 
 from app.modules.news.infra.crawling.sources import tag as ct
+from app.modules.news.infra.crawling.detector import detect_language
 from app.modules.news.domain.entities.news_entity import NewsEntity
 
 import re
@@ -18,9 +19,12 @@ def fetch_link(html: str, link: str, organ: str) -> NewsEntity | None:
     soup = decompose_contents_tag(soup, ct.removing_organ_tag.get(organ))
     soup = decompose_contents_text(soup, ct.removing_organ_text.get(organ))
 
+    content = precleaning(soup)
+
     return NewsEntity(
         title=title,
-        content=precleaning(soup),
+        language=detect_language(content),
+        content=content,
         url=link,
         created_at=datetime.now()
     )

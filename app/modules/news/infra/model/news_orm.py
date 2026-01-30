@@ -17,6 +17,11 @@ class NewsORM(Base):
         nullable=False
     )
 
+    language: Mapped[str] = mapped_column(
+        String(3),
+        nullable=False
+    )
+
     title: Mapped[str] = mapped_column(
         String(255),
         nullable=False

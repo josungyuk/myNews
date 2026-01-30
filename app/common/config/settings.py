@@ -1,14 +1,11 @@
-import os
-from dotenv import load_dotenv
+from pydantic_settings import BaseSettings
 
-load_dotenv()
-
-class Settings:
-    DB_USER: str = os.getenv("DB_USER")
-    DB_PASSWORD: str = os.getenv("DB_PASSWORD")
-    DB_HOST: str = os.getenv("DB_HOST")
-    DB_PORT: str = os.getenv("DB_PORT")
-    DB_NAME: str = os.getenv("DB_NAME")
+class Settings(BaseSettings):
+    DB_USER: str
+    DB_PASSWORD: str
+    DB_HOST: str
+    DB_PORT: str
+    DB_NAME: str
 
     @property
     def database_url(self) -> str:
@@ -18,14 +15,7 @@ class Settings:
             f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
         )
     
-    def vaildate(self):
-        missing = [
-            key for key, value in vars(self).items()
-            if key.startswith("DB_") and value is None
-        ]
-
-        if missing:
-            raise RuntimeError(f"Missing environment variables: {missing}")
+    class Config:
+        env_file = ".env"
         
 settings = Settings()
-settings.vaildate()
