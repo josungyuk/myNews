@@ -14,12 +14,12 @@ SessionLocal = sessionmaker(
 )
 
 def get_session() -> Session:
-    db = SessionLocal()
+    session = SessionLocal()
     try:
-        yield db
-        db.commit()
+        yield session
+        session.commit()
     except:
-        db.rollback()
+        session.rollback()
         raise
     finally:
-        db.close()
+        session.close()

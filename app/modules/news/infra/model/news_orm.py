@@ -14,7 +14,8 @@ class NewsORM(Base):
 
     url: Mapped[str] = mapped_column(
         String(255),
-        nullable=False
+        nullable=False,
+        unique=True
     )
 
     language: Mapped[str] = mapped_column(

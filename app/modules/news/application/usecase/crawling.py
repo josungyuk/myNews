@@ -31,6 +31,6 @@ class Crawling(CrawlingPort):
                 article_html = get_page_driver(driver, link)
                 entity = fetch_link(article_html, link, news_organ)
                 if entity:
-                    self.repo.save(entity)
+                    self.repo.save_ignore_duplicate(entity)
 
         return result
