@@ -75,7 +75,7 @@ new_organ_extract_title_tag = {
 
 new_organ_extract_content_tag = {
     NewsSource.YNA : "div.story-news.article",
-    NewsSource.YTN : "#CmAdContent.paragraph",
+    NewsSource.YTN : "div.paragraph#CmAdContent",
     NewsSource.REUTERS : "div.article-body-module__content__bnXL1",
     NewsSource.BBC : "article"
 }

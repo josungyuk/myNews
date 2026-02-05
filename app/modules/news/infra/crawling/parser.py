@@ -5,6 +5,7 @@ from urllib.parse import urljoin
 from app.modules.news.infra.crawling.sources import tag as ct
 from app.modules.news.infra.crawling.detector import detect_language
 from app.modules.news.domain.entities.news_entity import NewsEntity
+from app.common.config.logging import logger
 
 import re
 
@@ -64,5 +65,12 @@ def precleaning(soup: BeautifulSoup) -> str:
         text = re.sub(r"\s+", " ", text).strip()
         if text:
             results.append(text)
+
+    if not results:
+        for p in soup.select("span"):
+            text = p.get_text(" ", strip=True)
+            text = re.sub(r"\s+", " ", text).strip()
+            if text:
+                results.append(text)
 
     return "\n".join(results)

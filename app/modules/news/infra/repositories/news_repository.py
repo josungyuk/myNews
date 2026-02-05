@@ -1,5 +1,6 @@
 from app.modules.news.infra.model.news_orm import NewsORM
 from app.modules.news.domain.entities.news_entity import NewsEntity
+from app.common.config.logging import logger
 
 from sqlalchemy import select, exists
 from sqlalchemy.orm import Session, session
@@ -34,7 +35,8 @@ class NewsRepository:
                 self._session.add(orm)
                 self._session.flush()
             return True
-        except IntegrityError:
+        except IntegrityError as e:
+            # logger.error(e)
             return False
 
     def read_by_type(self, url: str) -> NewsEntity | None:
