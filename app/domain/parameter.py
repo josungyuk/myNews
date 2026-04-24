@@ -1,4 +1,4 @@
-from app.modules.news.infra.crawling.sources import tag as ct
+from app.domain import tag as ct
 
 parameters = [
     # (ct.NewsSource.YNA, ct.news_organ_homepage[(ct.NewsSource.YNA)], ct.news_organ_type[ct.NewsSource.YNA][ct.NewsType.ECONOMY], ct.news_organ_content_tag[(ct.NewsSource.YNA)]),

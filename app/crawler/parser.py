@@ -2,9 +2,9 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from urllib.parse import urljoin
 
-from app.modules.news.infra.crawling.sources import tag as ct
-from app.modules.news.infra.crawling.detector import detect_language
-from app.modules.news.domain.entities.news_entity import NewsEntity
+from app.domain import tag as ct
+from app.crawler.detector import detect_language
+from app.domain.news_entity import NewsEntity
 from app.common.config.logging import logger
 
 import re

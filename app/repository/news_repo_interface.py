@@ -1,5 +1,5 @@
 from typing import Optional, Protocol
-from app.modules.news.infra.model.news_orm import NewsEntity
+from app.domain.news_orm import NewsEntity
 
 class NewsRepositoryInterface(Protocol):
     def save(self, news: NewsEntity) -> bool | None: ...
