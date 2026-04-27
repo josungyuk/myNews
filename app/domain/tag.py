@@ -66,14 +66,18 @@ news_organ_content_tag = {
     NewsSource.BBC : "a[href ^= '/news/articles/'][data-testid=internal-link]:has(p)"
 }
 
-new_organ_extract_title_tag = {
+news_organ_extract_title_tag = {
     NewsSource.YNA : "h1.tit01",
     NewsSource.YTN : "h2.news_title",
     NewsSource.REUTERS : "h1[data-testid = 'Heading']",
     NewsSource.BBC : "div[data-component = 'headline-block']"
 }
 
-new_organ_extract_content_tag = {
+news_organ_extract_date_tag = {
+    NewsSource.YTN : "div.date",
+}
+
+news_organ_extract_content_tag = {
     NewsSource.YNA : "div.story-news.article",
     NewsSource.YTN : "div.paragraph#CmAdContent",
     NewsSource.REUTERS : "div.article-body-module__content__bnXL1",

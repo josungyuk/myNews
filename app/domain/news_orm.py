@@ -37,3 +37,13 @@ class NewsORM(Base):
         DateTime,
         nullable=False
     )
+
+    crawled_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False
+    )
+
+    score: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False
+    )

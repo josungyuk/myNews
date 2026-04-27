@@ -7,4 +7,6 @@ class NewsEntity:
     title: str
     content: str
     created_at: datetime
+    crawled_at: datetime
+    score: int
     language: str

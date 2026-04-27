@@ -15,8 +15,9 @@ def parse_link(html: str, content_tag: str, base_url: str) -> list[str]:
 
 def fetch_link(html: str, link: str, organ: str) -> NewsEntity | None:
     soup = parse_html(html)
-    title = extract_title(soup, ct.new_organ_extract_title_tag.get(organ))
-    soup = extract_contents(soup, ct.new_organ_extract_content_tag.get(organ))
+    title = extract_title(soup, ct.news_organ_extract_title_tag.get(organ))
+    date = extract_date(soup, ct.news_organ_extract_date_tag.get(organ))
+    soup = extract_contents(soup, ct.news_organ_extract_content_tag.get(organ))
     soup = decompose_contents_tag(soup, ct.removing_organ_tag.get(organ))
     soup = decompose_contents_text(soup, ct.removing_organ_text.get(organ))
 
@@ -27,13 +28,18 @@ def fetch_link(html: str, link: str, organ: str) -> NewsEntity | None:
         language=detect_language(content),
         content=content,
         url=link,
-        created_at=datetime.now()
+        created_at=convert_date_from_str(date, organ),
+        crawled_at=datetime.now(),
+        score=0
     )
 
 def parse_html(html: str) -> str:
     return BeautifulSoup(html, "lxml")
 
 def extract_title(soup: BeautifulSoup, tag: str) -> str:
+    return soup.select_one(tag).get_text("\n", strip=True)
+
+def extract_date(soup: BeautifulSoup, tag: str) -> str:
     return soup.select_one(tag).get_text("\n", strip=True)
 
 def extract_contents(soup: BeautifulSoup, tag: str) -> str:
@@ -74,3 +80,26 @@ def precleaning(soup: BeautifulSoup) -> str:
                 results.append(text)
 
     return "\n".join(results)
+
+def convert_date_from_str(date: str, organ: str) -> datetime:
+    result = ""
+
+    if(organ == ct.NewsSource.YTN):
+        dates = date.split()
+        year_mon_day = dates[0][0:-1].split(".")
+        year = year_mon_day[0]
+        month = year_mon_day[1]
+        day = year_mon_day[2]
+
+        am_pm = 12 if dates[1] == "오후" else 0
+        times = dates[2].split(":")
+        hour = (int)(times[0]) + am_pm
+        minute = times[1][0:-1]
+
+        result = f"{year}-{month}-{day} {hour:02d}:{minute}"
+    elif(organ == ct.NewsSource.YNA):
+        ...
+    elif(organ == ct.NewsSource.BBC):
+        ...
+
+    return datetime.strptime(result, "%Y-%m-%d %H:%M")
