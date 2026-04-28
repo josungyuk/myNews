@@ -74,7 +74,15 @@ news_organ_extract_title_tag = {
 }
 
 news_organ_extract_date_tag = {
+    NewsSource.YNA : "#newsUpdateTime01",
     NewsSource.YTN : "div.date",
+    NewsSource.BBC : "time",
+}
+
+news_organ_date_tag_value = {
+    NewsSource.YNA : "data-published-time",
+    NewsSource.YTN : None,
+    NewsSource.BBC : "datetime",
 }
 
 news_organ_extract_content_tag = {
