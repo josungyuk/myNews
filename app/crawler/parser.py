@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from urllib.parse import urljoin
 from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
 
 from app.domain import tag as ct
 from app.crawler.detector import detect_language
@@ -113,7 +114,41 @@ def convert_date_from_str(date: str, organ: str) -> datetime:
         kst = dt.astimezone(timezone(timedelta(hours=9)))
 
         result = kst.strftime("%Y-%m-%d %H:%M")
+    elif(organ == ct.NewsSource.GUARDIAN):
+        dates = date.split(" ")
+        result = convert_guarians_to_date(dates[1], dates[2], dates[3], dates[4])
+        logger.info(date)
 
     logger.info(result)    
 
     return datetime.strptime(result, "%Y-%m-%d %H:%M")
+
+def convert_guarians_to_date(day: int, month: str, year: int, time: str) -> str:
+    month_dict = {
+        "Jan": 1,
+        "Feb": 2,
+        "Mar": 3,
+        "Apr": 4,
+        "May": 5,
+        "Jun": 6,
+        "Jul": 7,
+        "Aug": 8,
+        "Sep": 9,
+        "Oct": 10,
+        "Nov": 11,
+        "Dec": 12,
+    }
+
+    month = month_dict.get(month)
+    hour = (int)(time[0:2])
+    minute = time[3]
+
+    formatted_date = f"{year}-{month}-{day} {hour:02d}:{minute}"
+
+    dt = datetime.strptime(formatted_date, "%Y-%m-%d %H:%M")
+    dt = dt.replace(tzinfo=ZoneInfo("Europe/London"))
+    kst = dt.astimezone(ZoneInfo("Asia/Seoul"))
+
+    result = datetime.strftime(kst, "%Y-%m-%d %H:%M")
+
+    return result
