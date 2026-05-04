@@ -16,7 +16,9 @@ def parse_link(html: str, content_tag: str, base_url: str) -> list[str]:
     return [urljoin(base_url, a["href"]) for a in soup.select(content_tag)]
 
 def fetch_link(html: str, link: str, organ: str) -> NewsEntity | None:
+    logger.info(link)
     logger.info(organ)
+    logger.info(ct.news_organ_extract_title_tag.get(organ))
     logger.info(ct.news_organ_extract_date_tag.get(organ))
 
     soup = parse_html(html)
@@ -42,6 +44,7 @@ def parse_html(html: str) -> str:
     return BeautifulSoup(html, "lxml")
 
 def extract_title(soup: BeautifulSoup, tag: str) -> str:
+    print("found:", soup.select_one(tag))
     return soup.select_one(tag).get_text("\n", strip=True)
 
 def extract_date(soup: BeautifulSoup, tag: str, tag_value: str) -> str:
@@ -118,6 +121,11 @@ def convert_date_from_str(date: str, organ: str) -> datetime:
         dates = date.split(" ")
         result = convert_guarians_to_date(dates[1], dates[2], dates[3], dates[4])
         logger.info(date)
+    elif(organ == ct.NewsSource.NPR):
+        dt = datetime.fromisoformat(date)
+        kst_dt = dt.astimezone(ZoneInfo("Asia/Seoul"))
+
+        result = kst_dt.strftime("%Y-%m-%d %H:%M")
 
     logger.info(result)    
 

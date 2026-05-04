@@ -6,6 +6,7 @@ class NewsSource(Enum):
     REUTERS = "reuters"
     BBC = "bbc"
     GUARDIAN = "guardian"
+    NPR = "npr"
 
 class NewsType(Enum):
     ECONOMY = "economy"
@@ -28,7 +29,8 @@ news_organ_homepage = {
     NewsSource.YTN : "https://www.ytn.co.kr",
     NewsSource.REUTERS : "https://www.reuters.com",
     NewsSource.BBC : "https://www.bbc.com",
-    NewsSource.GUARDIAN : "https://www.theguardian.com"
+    NewsSource.GUARDIAN : "https://www.theguardian.com",
+    NewsSource.NPR : "https://www.npr.org",
 }
 
 news_organ_type = {
@@ -61,8 +63,13 @@ news_organ_type = {
     },
 
     NewsSource.GUARDIAN : {
-        NewsType.ECONOMY : "business",
+        NewsType.ECONOMY : "business/economics",
         NewsType.SOCIETY : "international"
+    },
+
+    NewsSource.NPR : {
+        NewsType.ECONOMY : "sections/economy",
+        NewsType.SOCIETY : "sections/world"
     }
 }
 
@@ -71,7 +78,8 @@ news_organ_content_tag = {
     NewsSource.YTN : ".title a[href ^= 'https://www.ytn.co.kr/_ln/']",
     NewsSource.REUTERS : ".TitleLink a[href ^= '/worlds/']",
     NewsSource.BBC : "a[href ^= '/news/articles/'][data-testid=internal-link]:has(p)",
-    NewsSource.GUARDIAN : "a[href ^= '/world/']"
+    NewsSource.GUARDIAN : "a[href ^= '/'][data-link-name ^= 'news']",
+    NewsSource.NPR : "section#main-section h2.title a[href ^= 'https']"
 }
 
 news_organ_extract_title_tag = {
@@ -80,6 +88,7 @@ news_organ_extract_title_tag = {
     NewsSource.REUTERS : "h1[data-testid = 'Heading']",
     NewsSource.BBC : "div[data-component = 'headline-block']",
     NewsSource.GUARDIAN : "h1",
+    NewsSource.NPR : "h1"
 }
 
 news_organ_extract_date_tag = {
@@ -87,6 +96,7 @@ news_organ_extract_date_tag = {
     NewsSource.YTN : "div.date",
     NewsSource.BBC : "time",
     NewsSource.GUARDIAN : "details summary span",
+    NewsSource.NPR : "time"
 }
 
 news_organ_date_tag_value = {
@@ -94,6 +104,7 @@ news_organ_date_tag_value = {
     NewsSource.YTN : None,
     NewsSource.BBC : "datetime",
     NewsSource.GUARDIAN : None,
+    NewsSource.NPR : "datetime",
 }
 
 news_organ_extract_content_tag = {
@@ -102,6 +113,7 @@ news_organ_extract_content_tag = {
     NewsSource.REUTERS : "div.article-body-module__content__bnXL1",
     NewsSource.BBC : "article",
     NewsSource.GUARDIAN : "div#maincontent",
+    NewsSource.NPR : "div#storytext"
 }
 
 removing_organ_tag = {
@@ -139,7 +151,11 @@ removing_organ_tag = {
 
     NewsSource.GUARDIAN : [
 
-    ]
+    ],
+
+    NewsSource.NPR : [
+
+    ],
 }
 
 removing_organ_text = {
@@ -162,6 +178,10 @@ removing_organ_text = {
     ],
 
     NewsSource.GUARDIAN : [
+
+    ],
+
+    NewsSource.NPR : [
 
     ],
 }
