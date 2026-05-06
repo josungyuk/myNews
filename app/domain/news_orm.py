@@ -18,9 +18,9 @@ class NewsORM(Base):
         unique=True
     )
 
-    language: Mapped[str] = mapped_column(
-        String(3),
-        nullable=False
+    type: Mapped[str] = mapped_column(
+        String(12),
+        nullable=False,
     )
 
     title: Mapped[str] = mapped_column(
@@ -30,6 +30,11 @@ class NewsORM(Base):
 
     content: Mapped[str] = mapped_column(
         Text,
+        nullable=False
+    )
+
+    language: Mapped[str] = mapped_column(
+        String(3),
         nullable=False
     )
 
@@ -43,7 +48,22 @@ class NewsORM(Base):
         nullable=False
     )
 
-    score: Mapped[int] = mapped_column(
+    world_score: Mapped[int] = mapped_column(
         Integer,
         nullable=False
+    )
+
+    economy_score: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False
+    )
+
+    total_score: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False
+    )
+
+    ids: Mapped[str] = mapped_column(
+        Text,
+        nullable=True
     )

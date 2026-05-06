@@ -11,7 +11,7 @@ class NewsSource(Enum):
 class NewsType(Enum):
     ECONOMY = "economy"
     SOCIETY = "society"
-    WORLDS = "worlds"
+    WORLD = "world"
 
 class Nomination(Enum):
     JAPAN = "japan"
@@ -36,16 +36,16 @@ news_organ_homepage = {
 news_organ_type = {
     NewsSource.YNA : {
         NewsType.ECONOMY : "economy/all",
-        NewsType.SOCIETY : "society/all"
+        NewsType.WORLD : "international/all"
     },
 
     NewsSource.YTN : {
         NewsType.ECONOMY : "news/list.php?mcd=0102",
-        NewsType.SOCIETY : "news/list.php?mcd=0103"
+        NewsType.WORLD : "news/list.php?mcd=0104"
     },
 
     NewsSource.REUTERS : {
-        NewsType.WORLDS : {
+        NewsType.WORLD : {
             Nomination.JAPAN : "world/japan",
             Nomination.CHINA : "world/china",
             Nomination.ASIA : "world/asia-pacific",
@@ -59,26 +59,35 @@ news_organ_type = {
 
     NewsSource.BBC : {
         NewsType.ECONOMY : "business",
-        NewsType.SOCIETY : "news/us-canada"
+        NewsType.WORLD : "news/us-canada"
     },
 
     NewsSource.GUARDIAN : {
         NewsType.ECONOMY : "business/economics",
-        NewsType.SOCIETY : "international"
+        NewsType.WORLD : "international"
     },
 
     NewsSource.NPR : {
         NewsType.ECONOMY : "sections/economy",
-        NewsType.SOCIETY : "sections/world"
+        NewsType.WORLD : "sections/world"
     }
 }
 
-news_organ_content_tag = {
+news_language = {
+    NewsSource.YNA : "kr",
+    NewsSource.YTN : "kr",
+    NewsSource.REUTERS : "en",
+    NewsSource.BBC : "en",
+    NewsSource.GUARDIAN : "en",
+    NewsSource.NPR : "en",
+}
+
+news_organ_content_tag = {  
     NewsSource.YNA : ".list01 .item-box01 .img-con01 a[href ^= 'https://www.yna.co.kr/view/']",
     NewsSource.YTN : ".title a[href ^= 'https://www.ytn.co.kr/_ln/']",
     NewsSource.REUTERS : ".TitleLink a[href ^= '/worlds/']",
     NewsSource.BBC : "a[href ^= '/news/articles/'][data-testid=internal-link]:has(p)",
-    NewsSource.GUARDIAN : "a[href ^= '/'][data-link-name ^= 'news']",
+    NewsSource.GUARDIAN : "a[href ^= '/'][data-link-name ^= 'news'], .sublinks a[href ^= '/']:not([href *= '/live'])",
     NewsSource.NPR : "section#main-section h2.title a[href ^= 'https']"
 }
 
@@ -95,7 +104,7 @@ news_organ_extract_date_tag = {
     NewsSource.YNA : "#newsUpdateTime01",
     NewsSource.YTN : "div.date",
     NewsSource.BBC : "time",
-    NewsSource.GUARDIAN : "details summary span",
+    NewsSource.GUARDIAN : "[data-gu-name = 'dateline']",
     NewsSource.NPR : "time"
 }
 

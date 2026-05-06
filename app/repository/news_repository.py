@@ -13,21 +13,32 @@ class NewsRepository:
     def save(self, news: NewsEntity) -> None:
         orm = NewsORM(
             title = news.title,
+            type = news.type,
             content = news.content,
             url = news.url,
-            created_at = news.created_at
+            language = news.language,
+            created_at = news.created_at,
+            crawled_at = news.crawled_at,
+            score = news.score,
+            ids = news.ids
         )
 
         self._session.add(orm)
         self._session.commit()
 
-    def save_ignore_duplicate(self, news: NewsEntity) -> bool | None:
+    def save_ignore_duplicate(self, news: NewsEntity) -> bool:
         orm = NewsORM(
             title = news.title,
+            type = news.type,
             content = news.content,
             url = news.url,
+            language = news.language,
             created_at = news.created_at,
-            language = news.language
+            crawled_at = news.crawled_at,
+            world_score = news.world_score,
+            economy_score = news.economy_score,
+            total_score = news.total_score,
+            ids = news.ids
         )
 
         try:
@@ -36,7 +47,7 @@ class NewsRepository:
                 self._session.flush()
             return True
         except IntegrityError as e:
-            # logger.error(e)
+            logger.error("Fail to save news due to integrity error: ", e)
             return False
 
     def read_by_type(self, url: str) -> NewsEntity | None:

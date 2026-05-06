@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 
-from app.domain import tag as ct
+from app.common.config import tag as ct
 from app.crawler.detector import detect_language
 from app.domain.news_entity import NewsEntity
 from app.common.config.logging import logger
@@ -17,10 +17,6 @@ def parse_link(html: str, content_tag: str, base_url: str) -> list[str]:
 
 def fetch_link(html: str, link: str, organ: str) -> NewsEntity | None:
     logger.info(link)
-    logger.info(organ)
-    logger.info(ct.news_organ_extract_title_tag.get(organ))
-    logger.info(ct.news_organ_extract_date_tag.get(organ))
-
     soup = parse_html(html)
     title = extract_title(soup, ct.news_organ_extract_title_tag.get(organ))
     date = extract_date(soup, ct.news_organ_extract_date_tag.get(organ), ct.news_organ_date_tag_value.get(organ))
@@ -31,13 +27,17 @@ def fetch_link(html: str, link: str, organ: str) -> NewsEntity | None:
     content = precleaning(soup)
 
     return NewsEntity(
-        title=title,
-        language=detect_language(content),
-        content=content,
         url=link,
+        type="",
+        title=title,
+        content=content,
+        language=ct.news_language.get(organ),
         created_at=convert_date_from_str(date, organ),
         crawled_at=datetime.now(),
-        score=0
+        economy_score=0,
+        world_score=0,
+        total_score=0,
+        ids=""
     )
 
 def parse_html(html: str) -> str:
@@ -105,7 +105,11 @@ def convert_date_from_str(date: str, organ: str) -> datetime:
         am_pm = 12 if dates[1] == "오후" else 0
         times = dates[2].split(":")
         hour = (int)(times[0]) + am_pm
+        if hour == 24:
+            hour = 0
+
         minute = times[1][0:-1]
+
 
         result = f"{year}-{month}-{day} {hour:02d}:{minute}"
     elif(organ == ct.NewsSource.YNA):
@@ -120,14 +124,11 @@ def convert_date_from_str(date: str, organ: str) -> datetime:
     elif(organ == ct.NewsSource.GUARDIAN):
         dates = date.split(" ")
         result = convert_guarians_to_date(dates[1], dates[2], dates[3], dates[4])
-        logger.info(date)
     elif(organ == ct.NewsSource.NPR):
         dt = datetime.fromisoformat(date)
         kst_dt = dt.astimezone(ZoneInfo("Asia/Seoul"))
 
         result = kst_dt.strftime("%Y-%m-%d %H:%M")
-
-    logger.info(result)    
 
     return datetime.strptime(result, "%Y-%m-%d %H:%M")
 
