@@ -37,7 +37,7 @@ MyNews는 여러 뉴스 사이트의 기사를 크롤링하고 기사 내용을 
 - Alembic
 
 프로젝트 구조
-
+```
 myNews/
 ├── app/
 │   ├── common/        # 공통 설정, DB 연결, 환경 설정
@@ -50,7 +50,7 @@ myNews/
 ├── alembic/           # DB 마이그레이션 설정
 ├── requirements.txt   # Python 패키지 목록
 └── alembic.ini
-
+```
 실행 방법
 
 1. 저장소 클론
