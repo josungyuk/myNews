@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     DB_PORT: str
     DB_NAME: str
 
+    llm_api_key: str
+    llm_model: str = "gpt-4o-mini"
+
     @property
     def database_url(self) -> str:
         return (

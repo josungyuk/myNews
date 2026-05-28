@@ -11,7 +11,7 @@ from app.crawler.parser import parse_link, fetch_link
 from app.repository.news_repository import NewsRepository
 from app.domain.news_entity import NewsEntity
 from app.domain.result.news_score_result import NewsScoreResult
-from app.common.config.new_keyword import NEWS_KEYWORDS
+from app.common.config.news_keyword import NEWS_KEYWORDS
 from app.common.config.tag import NewsType
 
 
@@ -103,8 +103,3 @@ class CrawlingService:
             total_score= total_score,
             keywords_id_scores= keyword_id_scores
         )
-    
-
-
-# + 뉴스를 국제뉴스를 기반으로 할건지, 사회뉴스를 기반으로 할건지 정해야함. 초기 구상은 사회였으나 현재 구상은 국제임
-# + 고로 국제뉴스로 수정하려면 YTN, YNA, BBC 사회 항목을 world로 변경해야함.

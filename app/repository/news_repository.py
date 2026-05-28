@@ -6,11 +6,13 @@ from sqlalchemy import select, exists
 from sqlalchemy.orm import Session, session
 from sqlalchemy.exc import IntegrityError
 
+from datetime import datetime, date, time
+
 class NewsRepository:
     def __init__(self, session: Session):
         self._session = session
 
-    def save(self, news: NewsEntity) -> None:
+    def save(self, news: NewsEntity) -> bool:
         orm = NewsORM(
             title = news.title,
             type = news.type,
@@ -49,6 +51,18 @@ class NewsRepository:
         except IntegrityError as e:
             logger.error("Fail to save news due to integrity error: ", e)
             return False
+        
+    def read_economy_score_priority(self, ) -> list[NewsEntity]:
+        today_start = datetime.combine(date.today(), time.min)
+
+        # NewsORM.crawled_at >= today_start
+        stmt = select(NewsORM).where().order_by(NewsORM.economy_score.desc()).limit(20)
+        orm_list = self._session.execute(stmt).scalars().all()
+
+        return [
+            NewsEntity.from_orm(orm)
+            for orm in orm_list
+        ]
 
     def read_by_type(self, url: str) -> NewsEntity | None:
         stmt = select(NewsORM).where(NewsORM.url == url)
