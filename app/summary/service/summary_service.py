@@ -15,12 +15,20 @@ class SummaryService:
         self.summary_repo = summary_repo
         self.prompt_loader = PromptLoader()
     
-    def summary_economy_priority(self) -> list:
-        news:list[NewsEntity] = self.news_repo.read_economy_score_priority()
+    def summary_economy_priority(self, type: str) -> list:
+        
+        news:list[NewsEntity] = []
+
+        if type == "economy":
+            news = self.news_repo.read_economy_score_priority()
+        elif type == "world":
+            news = self.news_repo.read_world_score_priority()
+        elif type == "total":
+            news = self.news_repo.read_total_score_priority()
 
         news_json = self.news_entities_to_json(news)
 
-        instructions = self.prompt_loader.load_instructions("economy")
+        instructions = self.prompt_loader.load_instructions(type)
         prompt_template = f"""
             Analyze the following news data.
 
@@ -30,13 +38,6 @@ class SummaryService:
         response = self.llm_client.summarize(instuctions=instructions, prompt=prompt_template)
 
         return response
-
-
-
-    def summary_world_priority(self) -> list:
-        ...
-    def summary_total_score_priority(self) -> list:
-        ...
 
     def news_entities_to_json(self, news:list[NewsEntity]) -> json:
         data = [

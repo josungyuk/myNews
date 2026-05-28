@@ -27,7 +27,38 @@ def get_economy_summary(session: Session = Depends(get_session), llm_client: LLM
         summary_repository
     )
 
-    result = summary_service.summary_economy_priority()
-    # result = summary_service.test()
+    result = summary_service.summary_economy_priority("economy")
+
+    return result
+
+@router.get("/world")
+def get_economy_summary(session: Session = Depends(get_session), llm_client: LLMClient = Depends(get_llm_client)):
+    news_repository: NewsRepositoryInterface = NewsRepository(session)
+    summary_repository: SummaryRepositoryInterface = SummaryRepository(session)
+    
+
+    summary_service = SummaryService(
+        llm_client, 
+        news_repository, 
+        summary_repository
+    )
+
+    result = summary_service.summary_economy_priority("world")
+
+    return result
+
+@router.get("/total")
+def get_economy_summary(session: Session = Depends(get_session), llm_client: LLMClient = Depends(get_llm_client)):
+    news_repository: NewsRepositoryInterface = NewsRepository(session)
+    summary_repository: SummaryRepositoryInterface = SummaryRepository(session)
+    
+
+    summary_service = SummaryService(
+        llm_client, 
+        news_repository, 
+        summary_repository
+    )
+
+    result = summary_service.summary_economy_priority("total")
 
     return result
