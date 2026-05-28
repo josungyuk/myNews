@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfo
 
 from app.common.config import tag as ct
 from app.crawler.detector import detect_language
-from app.domain.news_entity import NewsEntity
+from app.news.domain.news_entity import NewsEntity
 from app.common.config.logging import logger
 
 import re

@@ -8,9 +8,9 @@ from app.common.config.logging import logger
 from app.common.config.parameter import parameters
 from app.crawler.client import get_page_driver, driver_provider
 from app.crawler.parser import parse_link, fetch_link
-from app.repository.news_repository import NewsRepository
-from app.domain.news_entity import NewsEntity
-from app.domain.result.news_score_result import NewsScoreResult
+from app.news.repository.news_repository import NewsRepository
+from app.news.domain.news_entity import NewsEntity
+from app.news.domain.result.news_score_result import NewsScoreResult
 from app.common.config.news_keyword import NEWS_KEYWORDS
 from app.common.config.tag import NewsType
 

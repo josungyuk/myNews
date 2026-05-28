@@ -1,5 +1,5 @@
-from app.domain.news_orm import NewsORM
-from app.domain.news_entity import NewsEntity
+from app.news.domain.news_orm import NewsORM
+from app.news.domain.news_entity import NewsEntity
 from app.common.config.logging import logger
 
 from sqlalchemy import select, exists

@@ -1,14 +1,14 @@
 from fastapi import APIRouter
 from fastapi import Depends
 
-from app.service.crawling_service import CrawlingService
+from app.news.service.news_service import CrawlingService
 from app.common.db.session_setting import get_session
-from app.repository.news_repository import NewsRepository
-from app.repository.news_repo_interface import NewsRepositoryInterface
+from app.news.repository.news_repository import NewsRepository
+from app.news.repository.news_repo_interface import NewsRepositoryInterface
 from sqlalchemy.orm import Session
 
 router = APIRouter(
-    prefix="/crawls"
+    prefix="/news"
 )
 
 @router.get("")

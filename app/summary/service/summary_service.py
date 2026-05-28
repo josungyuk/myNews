@@ -4,9 +4,9 @@ from datetime import datetime
 
 from app.prompts.prompt_loader import PromptLoader
 from app.llm.llm_client import LLMClient
-from app.repository.news_repository import NewsRepository
-from app.repository.summary_repository import SummaryRepository
-from app.domain.news_entity import NewsEntity
+from app.news.repository.news_repository import NewsRepository
+from app.summary.repository.summary_repository import SummaryRepository
+from app.news.domain.news_entity import NewsEntity
 
 class SummaryService:
     def __init__(self, llm_client:LLMClient, news_repo: NewsRepository, summary_repo: SummaryRepository):

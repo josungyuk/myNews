@@ -5,11 +5,11 @@ from app.common.db.session_setting import get_session
 from sqlalchemy.orm import Session
 from app.common.config.dependencies import get_llm_client
 from app.llm.llm_client import LLMClient
-from app.repository.news_repo_interface import NewsRepositoryInterface
-from app.repository.news_repository import NewsRepository
-from app.repository.summary_repo_interface import SummaryRepositoryInterface
-from app.repository.summary_repository import SummaryRepository
-from app.service.summary_service import SummaryService
+from app.news.repository.news_repo_interface import NewsRepositoryInterface
+from app.news.repository.news_repository import NewsRepository
+from app.summary.repository.summary_repo_interface import SummaryRepositoryInterface
+from app.summary.repository.summary_repository import SummaryRepository
+from app.summary.service.summary_service import SummaryService
 
 router = APIRouter(
     prefix="/summaries",
