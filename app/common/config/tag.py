@@ -141,7 +141,7 @@ removing_organ_tag = {
     ],
 
     NewsSource.REUTERS : [
-        "p[data-testid = 'promo-box']"
+        "p[data-testid = 'promo-box']",
         "p[data-testid = 'Body']",
         "p[data-testid = 'Tags']",
         "p[data-testid = 'AuthorBio']",

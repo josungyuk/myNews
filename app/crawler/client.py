@@ -15,6 +15,7 @@ def driver_provider() -> webdriver.Chrome:
         options = Options()
         options.add_argument("--incognito")
         driver = webdriver.Chrome(options=options)
+        driver.set_page_load_timeout(30)
         yield driver
     finally:
         if driver is not None:

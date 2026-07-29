@@ -14,6 +14,7 @@ class NewsRepository:
 
     def save(self, news: NewsEntity) -> bool:
         orm = NewsORM(
+            source = news.source,
             title = news.title,
             type = news.type,
             content = news.content,
@@ -32,6 +33,7 @@ class NewsRepository:
 
     def save_ignore_duplicate(self, news: NewsEntity) -> bool:
         orm = NewsORM(
+            source = news.source,
             title = news.title,
             type = news.type,
             content = news.content,
@@ -51,7 +53,7 @@ class NewsRepository:
                 self._session.flush()
             return True
         except IntegrityError as e:
-            logger.error("Fail to save news due to integrity error: ", e)
+            logger.info("Skipping duplicated article: %s", news.url)
             return False
         
     def read_economy_score_priority(self, ) -> list[NewsEntity]:
