@@ -16,7 +16,6 @@ class SummaryService:
         self.prompt_loader = PromptLoader()
     
     def summary_economy_priority(self, type: str) -> list:
-        
         news:list[NewsEntity] = []
 
         if type == "economy":
@@ -39,7 +38,7 @@ class SummaryService:
 
         return response
 
-    def news_entities_to_json(self, news:list[NewsEntity]) -> json:
+    def news_entities_to_json(self, news:list[NewsEntity]) -> list[dict]:
         data = [
             self.transform_to_json(news_entity)
             for news_entity in news
@@ -48,8 +47,6 @@ class SummaryService:
         return json.dumps(data, ensure_ascii=False, indent=2)
     
     def transform_to_json(self, news: NewsEntity) -> str:
-        print(type(news))
-        
         data = asdict(news)
 
         if isinstance(data.get("created_at"), datetime):

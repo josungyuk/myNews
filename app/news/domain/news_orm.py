@@ -12,6 +12,11 @@ class NewsORM(Base):
         primary_key=True,
     )
 
+    source: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False
+    )
+
     url: Mapped[str] = mapped_column(
         String(255),
         nullable=False,

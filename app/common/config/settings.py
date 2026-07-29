@@ -8,8 +8,8 @@ class Settings(BaseSettings):
     DB_NAME: str
 
     llm_api_key: str
-    llm_model: str = "gpt-4o-mini"
-
+    llm_model: str
+    
     @property
     def database_url(self) -> str:
         return (

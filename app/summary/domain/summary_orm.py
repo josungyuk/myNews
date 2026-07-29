@@ -5,7 +5,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 
 from app.common.db.base import Base
 
-class SummaryOrm(Base):
+class SummaryORM(Base):
     __tablename__ = "summary"
 
     id:Mapped[int] = mapped_column(
@@ -15,6 +15,11 @@ class SummaryOrm(Base):
 
     title: Mapped[str] = mapped_column(
         String(255),
+        nullable=False
+    )
+
+    importance_score: Mapped[int] = mapped_column(
+        Integer,
         nullable=False
     )
 
@@ -28,7 +33,7 @@ class SummaryOrm(Base):
         nullable=False
     )
 
-    key_point: Mapped[list[str]] = mapped_column(
+    key_points: Mapped[list[str]] = mapped_column(
         JSONB,
         nullable=False
     )

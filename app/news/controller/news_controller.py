@@ -11,7 +11,7 @@ router = APIRouter(
     prefix="/news"
 )
 
-@router.get("")
+@router.post("")
 def fetch_news(session: Session = Depends(get_session)):
     """
     Docstring for get_news

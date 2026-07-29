@@ -21,7 +21,9 @@ class NewsRepository:
             language = news.language,
             created_at = news.created_at,
             crawled_at = news.crawled_at,
-            score = news.score,
+            world_score = news.world_score,
+            economy_score = news.economy_score,
+            total_score = news.total_score,
             ids = news.ids
         )
 
@@ -52,12 +54,6 @@ class NewsRepository:
             logger.error("Fail to save news due to integrity error: ", e)
             return False
         
-    def read_by_type(self, url: str) -> NewsEntity | None:
-        stmt = select(NewsORM).where(NewsORM.url == url)
-        orm = self._session.execute(stmt).scalar_one_or_none()
-        
-        return orm
-        
     def read_economy_score_priority(self, ) -> list[NewsEntity]:
         today_start = datetime.combine(date.today(), time.min)
 
@@ -73,8 +69,7 @@ class NewsRepository:
     def read_world_score_priority(self, ) -> list[NewsEntity]:
         today_start = datetime.combine(date.today(), time.min)
 
-        # NewsORM.crawled_at >= today_start
-        stmt = select(NewsORM).where().order_by(NewsORM.world_score.desc()).limit(20)
+        stmt = select(NewsORM).where(NewsORM.created_at >= today_start).order_by(NewsORM.world_score.desc()).limit(20)
         orm_list = self._session.execute(stmt).scalars().all()
 
         return [
@@ -85,8 +80,7 @@ class NewsRepository:
     def read_total_score_priority(self, ) -> list[NewsEntity]:
         today_start = datetime.combine(date.today(), time.min)
 
-        # NewsORM.crawled_at >= today_start
-        stmt = select(NewsORM).where().order_by(NewsORM.total_score.desc()).limit(20)
+        stmt = select(NewsORM).where(NewsORM.created_at >= today_start).order_by(NewsORM.total_score.desc()).limit(20)
         orm_list = self._session.execute(stmt).scalars().all()
 
         return [

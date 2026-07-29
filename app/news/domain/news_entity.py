@@ -5,6 +5,7 @@ from dataclasses import dataclass
 class NewsEntity:
     url: str
     type: str
+    source: str
     title: str
     content: str
     language: str
@@ -20,6 +21,7 @@ class NewsEntity:
         return cls(
             url=orm.url,
             type=orm.type,
+            source=orm.source,
             title=orm.title,
             content=orm.content,
             language=orm.language,

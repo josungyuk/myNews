@@ -29,6 +29,7 @@ def fetch_link(html: str, link: str, organ: str) -> NewsEntity | None:
     return NewsEntity(
         url=link,
         type="",
+        source=organ,
         title=title,
         content=content,
         language=ct.news_language.get(organ),

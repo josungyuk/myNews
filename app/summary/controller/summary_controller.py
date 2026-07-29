@@ -15,7 +15,7 @@ router = APIRouter(
     prefix="/summaries",
 )
 
-@router.get("/economy")
+@router.post("/economy")
 def get_economy_summary(session: Session = Depends(get_session), llm_client: LLMClient = Depends(get_llm_client)):
     news_repository: NewsRepositoryInterface = NewsRepository(session)
     summary_repository: SummaryRepositoryInterface = SummaryRepository(session)
@@ -31,7 +31,7 @@ def get_economy_summary(session: Session = Depends(get_session), llm_client: LLM
 
     return result
 
-@router.get("/world")
+@router.post("/world")
 def get_economy_summary(session: Session = Depends(get_session), llm_client: LLMClient = Depends(get_llm_client)):
     news_repository: NewsRepositoryInterface = NewsRepository(session)
     summary_repository: SummaryRepositoryInterface = SummaryRepository(session)
@@ -47,7 +47,7 @@ def get_economy_summary(session: Session = Depends(get_session), llm_client: LLM
 
     return result
 
-@router.get("/total")
+@router.post("/total")
 def get_economy_summary(session: Session = Depends(get_session), llm_client: LLMClient = Depends(get_llm_client)):
     news_repository: NewsRepositoryInterface = NewsRepository(session)
     summary_repository: SummaryRepositoryInterface = SummaryRepository(session)

@@ -2,12 +2,6 @@ from fastapi import FastAPI
 from app.news.controller.news_controller import router as news_router
 from app.summary.controller.summary_controller import router as summary_router
 
-from app.common.db.base import Base
-from app.common.db.session_setting import engine
-
-
-Base.metadata.create_all(bind=engine)
-
 app = FastAPI(title="News Service")
 
 app.include_router(news_router)

@@ -41,6 +41,7 @@ class CrawlingService:
                     entity = fetch_link(article_html, link, news_organ)
                     if entity:
                         entity.type = news_type.value
+                        entity.source = news_organ.value
                         id_score = self.score_news_keyword(entity)
                         entity.economy_score = id_score.economy_score
                         entity.world_score = id_score.world_score
