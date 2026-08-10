@@ -31,7 +31,7 @@ class NewsRepository:
         self._session.add(orm)
         self._session.commit()
 
-    def save_ignore_duplicate(self, news: NewsEntity) -> bool:
+    def save_ignore_duplicate(self, news: NewsEntity) -> int | None:
         orm = NewsORM(
             source = news.source,
             title = news.title,
@@ -51,10 +51,11 @@ class NewsRepository:
             with self._session.begin_nested():
                 self._session.add(orm)
                 self._session.flush()
-            return True
+            return orm.id
+        
         except IntegrityError as e:
             logger.info("Skipping duplicated article: %s", news.url)
-            return False
+            return None
         
     def read_economy_score_priority(self, ) -> list[NewsEntity]:
         today_start = datetime.combine(date.today(), time.min)

@@ -14,12 +14,14 @@ from app.news.domain.news_entity import NewsEntity
 from app.news.domain.result.news_score_result import NewsScoreResult
 from app.common.config.news_keyword import NEWS_KEYWORDS
 from app.common.config.tag import NewsType
+from app.rag.service.chunking_service import ChunkingService
 
 
 
 class CrawlingService:
-    def __init__(self, repo: NewsRepository):
+    def __init__(self, repo: NewsRepository, chunking_service: ChunkingService):
         self.repo = repo
+        self.chunking_service = chunking_service
 
     def fetch_latest(self) -> list:
         result = []
@@ -63,9 +65,15 @@ class CrawlingService:
                             entity.total_score = id_score.total_score
                             entity.ids = id_score.keywords_id_scores
                             
-                            created = self.repo.save_ignore_duplicate(entity)
+                            save_news_id = self.repo.save_ignore_duplicate(entity)
 
-                            if created:
+                            # if fisish to successfully create news_entity then make chunk
+                            chunk = self.chunking_service.chunk(
+                                news_id=save_news_id,
+                                content= entity.content,
+                            )
+
+                            if save_news_id is not None:
                                 result.append(entity)
 
                         except TimeoutException:
@@ -84,6 +92,7 @@ class CrawlingService:
                                 link,
                             )
                             continue
+                        
             except TimeoutException:
                 logger.warning("Category page timed out: source=%s category=%s url=%s",
                     news_organ.value,
