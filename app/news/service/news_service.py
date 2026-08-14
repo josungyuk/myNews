@@ -67,13 +67,13 @@ class CrawlingService:
                             
                             save_news_id = self.repo.save_ignore_duplicate(entity)
 
-                            # if fisish to successfully create news_entity then make chunk
-                            chunk = self.chunking_service.chunk(
-                                news_id=save_news_id,
-                                content= entity.content,
-                            )
-
                             if save_news_id is not None:
+                                # if fisish to successfully create news_entity then make chunk
+                                chunks = self.chunking_service.chunk(
+                                    news_id=save_news_id,
+                                    content= entity.content,
+                                )
+                                
                                 result.append(entity)
 
                         except TimeoutException:

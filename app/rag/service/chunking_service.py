@@ -18,10 +18,10 @@ class ChunkingService:
         start = 0
 
         while start < len(content):
-            end = start + self.chunk_size
+            end = min(start + self.chunk_size, len(content))
             chunk_content = content[start:end].strip()
 
-            content_hash = hashlib.sha256(chunk_content.encode("utf-8")).hexdigest
+            content_hash = hashlib.sha256(chunk_content.encode("utf-8")).hexdigest()
 
             chunks.append(
                 NewsChunk(
@@ -32,6 +32,9 @@ class ChunkingService:
                 )
             )
 
-            start += self.chunk_size - self.overlap
+            if end == len(content):
+                break
+
+            start = end - self.overlap
 
         return chunks
