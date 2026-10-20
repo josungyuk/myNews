@@ -9,6 +9,8 @@ class Settings(BaseSettings):
 
     llm_api_key: str
     llm_model: str
+    embedding_model: str = "gemini-embedding-001"
+    embedding_dimension: int = 768
     
     @property
     def database_url(self) -> str:

@@ -15,13 +15,20 @@ from app.news.domain.result.news_score_result import NewsScoreResult
 from app.common.config.news_keyword import NEWS_KEYWORDS
 from app.common.config.tag import NewsType
 from app.rag.service.chunking_service import ChunkingService
+from app.rag.repository.news_chunk_repo_interface import NewsChunkRepositoryInterface
 
 
 
 class CrawlingService:
-    def __init__(self, repo: NewsRepository, chunking_service: ChunkingService):
+    def __init__(
+        self,
+        repo: NewsRepository,
+        chunking_service: ChunkingService,
+        chunk_repo: NewsChunkRepositoryInterface,
+    ):
         self.repo = repo
         self.chunking_service = chunking_service
+        self.chunk_repo = chunk_repo
 
     def fetch_latest(self) -> list:
         result = []
@@ -71,8 +78,9 @@ class CrawlingService:
                                 # if fisish to successfully create news_entity then make chunk
                                 chunks = self.chunking_service.chunk(
                                     news_id=save_news_id,
-                                    content= entity.content,
+                                    content=entity.content,
                                 )
+                                self.chunk_repo.save_all(chunks)
                                 
                                 result.append(entity)
 

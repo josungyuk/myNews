@@ -6,6 +6,7 @@ from app.common.db.session_setting import get_session
 from app.news.repository.news_repository import NewsRepository
 from app.news.repository.news_repo_interface import NewsRepositoryInterface
 from app.rag.service.chunking_service import ChunkingService
+from app.rag.repository.news_chunk_repository import NewsChunkRepository
 from sqlalchemy.orm import Session
 
 router = APIRouter(
@@ -19,9 +20,14 @@ def fetch_news(session: Session = Depends(get_session)):
     """
 
     news_repository: NewsRepositoryInterface = NewsRepository(session)
+    news_chunk_repository = NewsChunkRepository(session)
     chunking_service = ChunkingService()
-    crwaling_service = CrawlingService(news_repository, chunking_service)
+    crawling_service = CrawlingService(
+        news_repository,
+        chunking_service,
+        news_chunk_repository,
+    )
 
-    results = crwaling_service.fetch_latest()
+    results = crawling_service.fetch_latest()
       
     return results
