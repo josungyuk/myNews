@@ -6,3 +6,4 @@ class NewsChunk:
     chunk_index: int
     content: str
     content_hash: str
+    embedding: list[float] | None = None

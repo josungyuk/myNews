@@ -18,6 +18,7 @@ class NewsChunkRepository:
                 chunk_index=chunk.chunk_index,
                 content=chunk.content,
                 content_hash=chunk.content_hash,
+                embedding=chunk.embedding,
             )
             for chunk in chunks
         ]

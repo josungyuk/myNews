@@ -16,6 +16,7 @@ from app.common.config.news_keyword import NEWS_KEYWORDS
 from app.common.config.tag import NewsType
 from app.rag.service.chunking_service import ChunkingService
 from app.rag.repository.news_chunk_repo_interface import NewsChunkRepositoryInterface
+from app.rag.service.chunk_embedding_service import ChunkEmbeddingService
 
 
 
@@ -25,10 +26,12 @@ class CrawlingService:
         repo: NewsRepository,
         chunking_service: ChunkingService,
         chunk_repo: NewsChunkRepositoryInterface,
+        chunk_embedding_service: ChunkEmbeddingService,
     ):
         self.repo = repo
         self.chunking_service = chunking_service
         self.chunk_repo = chunk_repo
+        self.chunk_embedding_service = chunk_embedding_service
 
     def fetch_latest(self) -> list:
         result = []
@@ -80,6 +83,15 @@ class CrawlingService:
                                     news_id=save_news_id,
                                     content=entity.content,
                                 )
+
+                                try:
+                                    chunks = self.chunk_embedding_service.embed(chunks)
+                                except Exception:
+                                    logger.exception(
+                                        "Embedding failed; saving chunks without vectors: %s",
+                                        link,
+                                    )
+
                                 self.chunk_repo.save_all(chunks)
                                 
                                 result.append(entity)
