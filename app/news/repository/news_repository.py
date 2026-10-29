@@ -56,6 +56,12 @@ class NewsRepository:
         except IntegrityError as e:
             logger.info("Skipping duplicated article: %s", news.url)
             return None
+
+    def commit(self) -> None:
+        self._session.commit()
+
+    def rollback(self) -> None:
+        self._session.rollback()
         
     def read_economy_score_priority(self, ) -> list[NewsEntity]:
         today_start = datetime.combine(date.today(), time.min)

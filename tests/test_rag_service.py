@@ -31,6 +31,12 @@ class FakeLLMClient:
 
 
 class RagServiceTest(unittest.TestCase):
+    def test_empty_question_is_rejected(self):
+        service = RagService(FakeEmbeddingClient(), FakeSearchRepository([]), FakeLLMClient())
+
+        with self.assertRaises(ValueError):
+            service.answer("   ")
+
     def test_answer_retrieves_context_and_sources(self):
         chunks = [
             RetrievedChunk(
@@ -64,6 +70,36 @@ class RagServiceTest(unittest.TestCase):
         self.assertEqual(result["sources"], [])
         self.assertIn("찾지 못했습니다", result["answer"])
         self.assertIsNone(llm.prompt)
+
+    def test_sources_are_unique_by_news_id(self):
+        chunks = [
+            RetrievedChunk(1, 0, "first", "same article", "YTN", "https://example.com/1"),
+            RetrievedChunk(1, 1, "second", "same article", "YTN", "https://example.com/1"),
+            RetrievedChunk(2, 0, "third", "another article", "BBC", "https://example.com/2"),
+        ]
+        search = FakeSearchRepository(chunks)
+        llm = FakeLLMClient()
+        service = RagService(FakeEmbeddingClient(), search, llm)
+
+        result = service.answer("news")
+
+        self.assertEqual([source["news_id"] for source in result["sources"]], [1, 2])
+
+    def test_context_is_limited_to_configured_maximum(self):
+        chunks = [
+            RetrievedChunk(1, 0, "x" * 100, "title", "YTN", "https://example.com/1"),
+        ]
+        llm = FakeLLMClient()
+        service = RagService(
+            FakeEmbeddingClient(),
+            FakeSearchRepository(chunks),
+            llm,
+            max_context_chars=20,
+        )
+
+        service.answer("news")
+
+        self.assertLessEqual(len(llm.prompt.split("News context:\n", 1)[1]), 20)
 
 
 if __name__ == "__main__":

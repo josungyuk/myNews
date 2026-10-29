@@ -35,7 +35,7 @@ class CrawlingService:
 
     def fetch_latest(self) -> list:
         result = []
-        counts = 10
+        counts = 1
 
         
         for param in parameters:
@@ -77,24 +77,29 @@ class CrawlingService:
                             
                             save_news_id = self.repo.save_ignore_duplicate(entity)
 
-                            if save_news_id is not None:
-                                # if fisish to successfully create news_entity then make chunk
-                                chunks = self.chunking_service.chunk(
-                                    news_id=save_news_id,
-                                    content=entity.content,
+                            if save_news_id is None:
+                                self.repo.rollback()
+                                continue
+
+                            # Commit each article separately so a long crawl does not
+                            # keep one database transaction open for the whole request.
+                            chunks = self.chunking_service.chunk(
+                                news_id=save_news_id,
+                                content=entity.content,
+                            )
+
+                            try:
+                                chunks = self.chunk_embedding_service.embed(chunks)
+                            except Exception:
+                                logger.exception(
+                                    "Embedding failed; saving chunks without vectors: %s",
+                                    link,
                                 )
 
-                                try:
-                                    chunks = self.chunk_embedding_service.embed(chunks)
-                                except Exception:
-                                    logger.exception(
-                                        "Embedding failed; saving chunks without vectors: %s",
-                                        link,
-                                    )
+                            self.chunk_repo.save_all(chunks)
+                            self.repo.commit()
 
-                                self.chunk_repo.save_all(chunks)
-                                
-                                result.append(entity)
+                            result.append(entity)
 
                         except TimeoutException:
                             logger.warning("Page timed out: %s", link)
@@ -105,8 +110,9 @@ class CrawlingService:
                             break
 
                         except Exception:
-                            logger.warning(
-                                "Faild to process article: source:%s category=%s url=%s",
+                            self.repo.rollback()
+                            logger.exception(
+                                "Failed to process article: source=%s category=%s url=%s",
                                 news_organ.value,
                                 news_type.value,
                                 link,
